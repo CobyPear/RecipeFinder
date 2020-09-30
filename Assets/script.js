@@ -38,6 +38,8 @@ function mapResults(data) {
 }
 
 function displayResults(data) {
+    const section = document.querySelector("section")
+    section.innerHTML = ''
 
     for (let i = 0; i < data.length; i++) {
         // recipe title
@@ -47,7 +49,6 @@ function displayResults(data) {
         // image
         const img = document.createElement('img')
         // section tag from HTML
-        const section = document.querySelector("section")
         img.setAttribute('src', data[i].image)
         img.setAttribute('alt', data[i].title)
         h4.append(title)
@@ -63,7 +64,6 @@ function displayResults(data) {
 }
 
 function displayRecipe(obj, id) {
-    console.log("dips rec ", obj)
 
     const title = obj.title;
     const instructions = obj.instructions;
