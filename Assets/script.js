@@ -1,6 +1,7 @@
+
+const xhr = new XMLHttpRequest();
 const ingredients = document.getElementById('ingredients')
 const submitBtn = document.getElementById('submit')
-const queryUrl = "https://api.spoonacular.com/recipes/findByIngredients?apiKey=485cdff989f1474e9d84102838b6aa31&number=25&ranking=1&ingredients="
 const recipeImg = document.createElement('img')
 const recipeTitle = document.createElement('h4')
 const recipeDiv = document.createElement('div')
@@ -11,23 +12,14 @@ let results;
 submitBtn.addEventListener('click', e => {
     e.preventDefault();
     // Call spoonacular API and map results to flat object
-    $.ajax({
-        url: queryUrl + ingredients.value,
-        method: "GET"
-    })
-        .then(res => {
-            console.log(res)
-            mapResults(res)
-            displayResults(results)
-        })
-        .catch(err => console.error(err))
+    findRecipesByIngredients(ingredients.value)
 })
 
 document.body.addEventListener('click', e => {
     if (e.target.className === 'viewBtn') {
-        console.log(e.target.value)
+        console.log(e.target.id)
         e.preventDefault();
-        findRecipe(e.target.value)
+        findRecipe(e.target.id)
     }
 })
 
@@ -62,7 +54,7 @@ function displayResults(data) {
         const button = document.createElement('button')
         button.textContent = 'View Recipe'
         button.classList = "viewBtn"
-        button.value = data[i].id
+        button.id = data[i].id
         section.append(h4)
         section.append(img)
         img.after(button)
@@ -70,13 +62,56 @@ function displayResults(data) {
     }
 }
 
+function displayRecipe(obj, id) {
+    console.log("dips rec ", obj)
+
+    const title = obj.title;
+    const instructions = obj.instructions;
+    const div = document.createElement('div')
+    const h4 = document.createElement('h4');
+    const p = document.createElement('p');
+    const currentRec = document.getElementById(id)
+
+    h4.textContent = title;
+    p.textContent = instructions
+    div.append(h4, p)
+    currentRec.after(div)
+
+
+}
+
+// Find's recipe by id from Spoonacular
 function findRecipe(id) {
 
     const queryUrl = "https://api.spoonacular.com/recipes/" + id + "/information?apiKey=485cdff989f1474e9d84102838b6aa31"
-    $.ajax({
-        url: queryUrl,
-        method: "GET"
-    })
-        .then(res => console.log(res))
-        .catch(err => console.error(err))
+    xhr.open('GET', queryUrl)
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            console.log(JSON.parse(xhr.responseText))
+            const obj = JSON.parse(xhr.responseText)
+            displayRecipe(obj, id)
+        } else {
+            console.log(xhr.status)
+        }
+    }
+    xhr.send();
+}
+
+// finds recipes by ingredients from Spoonacular
+function findRecipesByIngredients(ingredients) {
+
+    const queryUrl = "https://api.spoonacular.com/recipes/findByIngredients?apiKey=485cdff989f1474e9d84102838b6aa31&number=25&ranking=1&ingredients="
+
+    xhr.open('GET', queryUrl + ingredients)
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            // console.log(JSON.parse(xhr.responseText))
+            mapResults(JSON.parse(xhr.responseText))
+            displayResults(JSON.parse(xhr.responseText))
+        } else {
+            console.log(xhr.status)
+        }
+    }
+    xhr.send();
+
 }
