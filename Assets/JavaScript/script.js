@@ -62,19 +62,45 @@ function displayResults(data) {
 }
 
 function displayRecipe(obj, id) {
-    console.log(obj.analyzedInstructions[0].steps)
-    
+    // console.log(obj.analyzedInstructions[0].steps)
+    const directions = obj.analyzedInstructions[0].steps.map(x => ({
+        number: x.number,
+        instruction: x.step,
+        ingredients: [...x.ingredients],
+        equipment: x.equipment
+    }))
+    console.log(directions)
+
+
     const title = obj.title;
-    const instructions = obj.instructions;
     const div = document.createElement('div')
     const h4 = document.createElement('h4');
-    const p = document.createElement('p');
     const currentRec = document.getElementById(id)
-    currentRec.before('')
-
+    let p;
     h4.textContent = title;
-    p.textContent = instructions
-    div.append(h4, p)
+    div.append(h4)
+    
+    for (let i = 0; i < directions.length; i++) {
+        
+        p = document.createElement('p')
+        
+        const h5 = document.createElement('h5')
+        const h4 = document.createElement('h4')
+        
+        console.log(directions[i])
+        
+        const stepNumber = directions[i].number;
+        const instructions = directions[i].instruction;
+        const ingredients = directions[i].ingredients;
+        const equipment = directions[i].equipment
+        
+        ingredients.forEach(x=> h5.textContent = x.name)
+        equipment.forEach(x=> h4.textContent = x.name)
+    
+        p.textContent = stepNumber + " . " + instructions
+        div.append(h5, h4, p)
+    }
+
     currentRec.after(div)
 
 
