@@ -74,17 +74,17 @@ function displayRecipe(obj, id) {
 
     const title = obj.title;
     const div = document.createElement('div')
-    const h4 = document.createElement('h4');
+    const h2 = document.createElement('h2');
     const currentRec = document.getElementById(id)
     let p;
-    h4.textContent = title;
-    div.append(h4)
+    h2.textContent = title;
+    div.append(h2)
     
     for (let i = 0; i < directions.length; i++) {
         
         p = document.createElement('p')
         
-        const h5 = document.createElement('h5')
+        const h3 = document.createElement('h3')
         const h4 = document.createElement('h4')
         
         console.log(directions[i])
@@ -94,11 +94,11 @@ function displayRecipe(obj, id) {
         const ingredients = directions[i].ingredients;
         const equipment = directions[i].equipment
         
-        ingredients.forEach(x=> h5.textContent = x.name)
-        equipment.forEach(x=> h4.textContent = x.name)
+        ingredients.forEach(x=> h3.textContent = "Ingredients: " + x.name)
+        equipment.forEach(x=> h4.textContent = "Equipment: " + x.name)
     
         p.textContent = stepNumber + " . " + instructions
-        div.append(h5, h4, p)
+        div.append(h3, h4, p)
     }
 
     currentRec.after(div)
