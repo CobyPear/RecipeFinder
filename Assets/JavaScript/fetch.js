@@ -31,13 +31,3 @@ function findRecipesByIngredients(ingredients) {
         .catch(error => console.error("error:", error))
 
 }
-
-/**
- * fetch(
- * queryUrl,
- * { method: 'GET'}
- * )
- * .then(res => response.json())
- * .then(json => console.log(json))
- * .catch(console.error("error:", error"))
- */

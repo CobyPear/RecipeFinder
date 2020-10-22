@@ -15,7 +15,7 @@ submitBtn.addEventListener('click', e => {
 
 document.body.addEventListener('click', e => {
     if (e.target.className === 'viewBtn') {
-        console.log(e.target.id)
+        // console.log(e.target.id)
         e.preventDefault();
         findRecipe(e.target.id)
     }
@@ -32,7 +32,6 @@ function mapResults(data) {
         id: x.id,
 
     }))
-    // console.log(results)
 }
 
 function displayResults(data) {
@@ -62,21 +61,26 @@ function displayResults(data) {
 }
 
 function displayRecipe(obj, id) {
-    // console.log(obj.analyzedInstructions[0].steps)
+
+    const recipe = document.getElementsByClassName(id)
+    // prevents recipe from being rendered more than once
+    if (recipe.length) return
+
     const directions = obj.analyzedInstructions[0].steps.map(x => ({
         number: x.number,
         instruction: x.step,
         ingredients: [...x.ingredients],
         equipment: x.equipment
     }))
-    console.log(directions)
-
+    // console.log(directions)
 
     const title = obj.title;
     const div = document.createElement('div')
+    div.classList = id
     const h2 = document.createElement('h2');
     const currentRec = document.getElementById(id)
     let p;
+    
     h2.textContent = title;
     div.append(h2)
     
@@ -102,6 +106,5 @@ function displayRecipe(obj, id) {
     }
 
     currentRec.after(div)
-
 
 }
