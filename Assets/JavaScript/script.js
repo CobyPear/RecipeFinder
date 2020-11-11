@@ -4,6 +4,8 @@ const recipeImg = document.createElement('img')
 const recipeTitle = document.createElement('h4')
 const recipeDiv = document.createElement('div')
 let results;
+// let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+// let userRecipes = JSON.parse(localStorage.getItem('recipes')) || []
 
 
 // EVENT LISTENERS
@@ -21,6 +23,13 @@ document.body.addEventListener('click', e => {
     }
 })
 
+ingredients.addEventListener('click', e => {
+    // e.preventDefault();
+    if (e.target.value === "type an ingredient here") {
+        ingredients.value = ""
+    }
+})
+
 
 // FUNCTIONS
 
@@ -32,6 +41,9 @@ function mapResults(data) {
         id: x.id,
 
     }))
+
+    // recipes.push(results)
+    // localStorageSet("recipes", recipes)
 }
 
 function displayResults(data) {
@@ -39,40 +51,41 @@ function displayResults(data) {
     section.innerHTML = ''
 
     for (let i = 0; i < data.length; i++) {
-        // recipe title
-        const title = recipeTitle.textContent = data[i].title
-        // recipe title h4 tag
-        const h4 = document.createElement('h4')
-        // image
-        const img = document.createElement('img')
-        // section tag from HTML
-        img.setAttribute('src', data[i].image)
-        img.setAttribute('alt', data[i].title)
-        h4.append(title)
-        const button = document.createElement('button')
-        button.textContent = 'View Recipe'
-        button.classList = "viewBtn"
-        button.id = data[i].id
-        section.append(h4)
-        section.append(img)
-        img.after(button)
+            console.log("data[i]: ", data[i])
+            // recipe title
+            const title = recipeTitle.textContent = data[i].title
+                // recipe title h4 tag
+            const h2 = document.createElement('h2')
+                // image
+            const img = document.createElement('img')
+                // section tag from HTML
+            img.setAttribute('src', data[i].image)
+            img.setAttribute('alt', data[i].title)
+            h2.append(title)
+            const button = document.createElement('button')
+            button.textContent = 'View Recipe'
+            button.classList = "viewBtn"
+            button.id = data[i].id
+            section.append(h2)
+            section.append(img)
+            img.after(button)   
 
     }
 }
 
 function displayRecipe(obj, id) {
 
-    const recipe = document.getElementsByClassName(id)
-    // prevents recipe from being rendered more than once
-    if (recipe.length) return
+    const recipeRes = document.getElementsByClassName(id)
+        // prevents recipe from being rendered more than once
+    if (recipeRes.length) return
 
     const directions = obj.analyzedInstructions[0].steps.map(x => ({
-        number: x.number,
-        instruction: x.step,
-        ingredients: [...x.ingredients],
-        equipment: x.equipment
-    }))
-    // console.log(directions)
+            number: x.number,
+            instruction: x.step,
+            ingredients: [...x.ingredients],
+            equipment: x.equipment
+        }))
+        // console.log(directions)
 
     const title = obj.title;
     const div = document.createElement('div')
@@ -80,27 +93,27 @@ function displayRecipe(obj, id) {
     const h2 = document.createElement('h2');
     const currentRec = document.getElementById(id)
     let p;
-    
+
     h2.textContent = title;
     div.append(h2)
-    
+
     for (let i = 0; i < directions.length; i++) {
-        
+
         p = document.createElement('p')
-        
+
         const h3 = document.createElement('h3')
         const h4 = document.createElement('h4')
-        
+
         console.log(directions[i])
-        
+
         const stepNumber = directions[i].number;
         const instructions = directions[i].instruction;
         const ingredients = directions[i].ingredients;
         const equipment = directions[i].equipment
-        
-        ingredients.forEach(x=> h3.textContent = "Ingredients: " + x.name)
-        equipment.forEach(x=> h4.textContent = "Equipment: " + x.name)
-    
+
+        ingredients.forEach(x => h3.textContent = "Ingredients: " + x.name)
+        equipment.forEach(x => h4.textContent = "Equipment: " + x.name)
+
         p.textContent = stepNumber + " . " + instructions
         div.append(h3, h4, p)
     }
@@ -108,3 +121,9 @@ function displayRecipe(obj, id) {
     currentRec.after(div)
 
 }
+
+// function localStorageSet(name, value) {
+//     if (typeof localStorage !== 'undefined') {
+//         localStorage.setItem(name, JSON.stringify(value))
+//     }
+// }
